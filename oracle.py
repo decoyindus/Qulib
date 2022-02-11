@@ -16,6 +16,7 @@ import json
 import base64
 from qiskit.circuit import qpy_serialization
 from qiskit.aqua.components.oracles import TruthTableOracle
+from qiskit.tools.monitor import job_monitor
 import operator
 
 
