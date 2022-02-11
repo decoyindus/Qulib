@@ -20,22 +20,11 @@ import operator
 
 
 app = flask.Flask(__name__)
-# app.config["DEBUG"] = True
-
-
-def circuit_to_json(circuit:QuantumCircuit,key:str):
-    buf = io.BytesIO()
-    qpy_serialization.dump(circuit, buf)
-    json_str = json.dumps({
-        key: base64.b64encode(buf.getvalue()).decode('utf8')
-    })
-
-    return json_str
-
+app.config["DEBUG"] = True
 
 @app.route('/', methods=['GET'])
 def home():
-    return
+    return jsonify({'response':'hello'})
 
 
 @app.route('/demo/get_oracle',methods=['GET'])
@@ -204,7 +193,6 @@ def D_Josza():
         # resp = {'dj_oracle': json_str}
     return jsonify(json_str)
 
+if __name__=='__main__':
+    app.run()
 
-app.run()
-
-# app.run()
