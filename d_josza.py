@@ -159,6 +159,7 @@ def D_Josza():
 
     # API_KEY = 'dc2f533544c3bfa39230d244c7986dac6264ca6adbe570f3ce4f7d197d9c815d2ab9e36a5011182969bcce0a059654c59c80b401697bc6626916482a26bfdd8e'
     # IBMQ.save_account(API_KEY)
+    IBMQ.disable_account()
     IBMQ.enable_account(API_KEY)
     provider = IBMQ.get_provider('ibm-q')
     backend = least_busy(provider.backends(filters=lambda x: x.configuration().n_qubits >= (n + 1) and
