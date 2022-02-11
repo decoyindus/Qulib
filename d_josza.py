@@ -191,6 +191,7 @@ def D_Josza():
         # })
         # json_str = json.dumps(assemble(circuit).to_dict())
         # resp = {'dj_oracle': json_str}
+    IBMQ.disable_account()
     return jsonify(json_str)
 
 if __name__=='__main__':
