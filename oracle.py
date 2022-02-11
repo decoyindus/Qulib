@@ -281,8 +281,8 @@ def apply_bv():
                                            not x.configuration().simulator and
                                            x.status().operational == True))
         # backend = provider.get_backend('ibmq_5_yorktown')
-    simulator = BasicAer.get_backend('qasm_simulator')
-    job = execute(circuit, simulator, shots=1)
+#     simulator = BasicAer.get_backend('qasm_simulator')
+    job = execute(circuit, backend, shots=1024)
     job_monitor(job)
     result = job.result()
     noisy_keys = result.get_counts()
