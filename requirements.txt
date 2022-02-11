@@ -55,7 +55,6 @@ requests-ntlm==1.1.0
 retworkx==0.11.0
 scikit-learn==1.0.2
 scipy==1.8.0
-sip==4.19.13
 six==1.16.0
 stevedore==3.5.0
 sympy==1.9
