@@ -145,7 +145,7 @@ def D_Josza():
     mid = oracle.construct_circuit()
     post = QuantumCircuit(oracle.variable_register, oracle.output_register)
     post.h(oracle.variable_register)
-    circuit = pre+mid+post
+    circuit = mid.compose(pre,front=True).compose(post)
     res = ''
     msr = ClassicalRegister(oracle.variable_register.size)
     circuit.add_register(msr)
@@ -158,7 +158,7 @@ def D_Josza():
     # result = job.result()
     # m = result.get_counts()
 
-    # API_KEY = 'dc2f533544c3bfa39230d244c7986dac6264ca6adbe570f3ce4f7d197d9c815d2ab9e36a5011182969bcce0a059654c59c80b401697bc6626916482a26bfdd8e'
+    # API_KEY = ''
     # IBMQ.save_account(API_KEY)
 #     IBMQ.disable_account()
     IBMQ.enable_account(API_KEY)
