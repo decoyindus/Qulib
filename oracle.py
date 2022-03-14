@@ -7,6 +7,7 @@ from qiskit.providers.ibmq import least_busy
 # backend.name()
 from qiskit import Aer,BasicAer,IBMQ
 from qiskit import QuantumCircuit, assemble, execute,ClassicalRegister,transpile, QuantumRegister
+from sympy import Matrix,mod_inverse
 # import basic plot tools
 from qiskit.visualization import plot_histogram
 import matplotlib.pyplot as plt
