@@ -6,7 +6,7 @@ from qiskit.providers.ibmq import least_busy
 # backend = least_busy(IBMQ.backends(filters=lambda x: not x.configuration().simulator))
 # backend.name()
 from qiskit import Aer,BasicAer,IBMQ
-from qiskit import QuantumCircuit, assemble, execute,ClassicalRegister,transpile
+from qiskit import QuantumCircuit, assemble, execute,ClassicalRegister,transpile, QuantumRegister
 # import basic plot tools
 from qiskit.visualization import plot_histogram
 import matplotlib.pyplot as plt
