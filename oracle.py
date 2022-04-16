@@ -16,7 +16,9 @@ import io
 import json
 import base64
 from qiskit.circuit import qpy_serialization
-from qiskit.aqua.components.oracles import TruthTableOracle
+from qiskit.aqua.components.oracles import TruthTableOracle, LogicalExpressionOracle
+from qiskit.aqua.algorithms import Grover
+from qiskit.aqua import QuantumInstance
 from qiskit.tools.monitor import job_monitor
 import operator
 
@@ -542,7 +544,7 @@ def grover_boolexpr():
     print(msr['measurement'])
     res = max(msr['measurement'].items(), key=lambda x: x[1])[0]
     print(res)
-    return jsonify(res)
+    return jsonify(res[::-1])
 
 
 
