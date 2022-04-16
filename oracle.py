@@ -21,6 +21,7 @@ from qiskit.aqua.algorithms import Grover
 from qiskit.aqua import QuantumInstance
 from qiskit.tools.monitor import job_monitor
 import operator
+from qiskit.quantum_info import Operator
 
 
 def gaussian_elimination(msr):
