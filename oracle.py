@@ -453,6 +453,97 @@ def apply_simon():
     IBMQ.disable_account()
     return jsonify({'key': key})
 
+################GROVER'S ALGO######################################################
+@app.route('/demo/get_grover_circuit',methods=['GET'])
+
+def get_circuit():
+
+    if 'qubits' in request.args:
+        n = int(request.args['qubits'])
+
+    else:
+        return jsonify({'ERROR': 'Cannot specify the number of qubits for circuit.'})
+    if 'good states' in request.args:
+        W = request.args.getlist('good states')
+        print(W)
+
+    else:
+        return jsonify({'ERROR': 'Cannot specify the winning states.'})
+
+    def phase(nqbits,G):
+        name = 'Uf'
+        circuit = QuantumCircuit(nqbits, name=name)
+        mtx = np.identity(pow(2,nqbits))
+        for g in G:
+            mtx[int(g)][int(g)] = -1
+        circuit.unitary(Operator(mtx),range(nqbits))
+        return circuit
+
+    def diffuse(nqbits):
+        circuit = QuantumCircuit(nqbits,name="V")
+        circuit.h(range(nqbits))
+        circuit.append(phase(nqbits,[0]), range(nqbits))
+        circuit.h(range(nqbits))
+        return circuit
+
+    orcle = QuantumCircuit(n, n)
+    iterations = int(np.floor((np.pi/4)*np.sqrt(pow(2,n)/len(W))))
+    orcle.h(range(n))
+    for _ in range(iterations):
+        orcle.append(phase(n,W), range(n))
+        orcle.append(diffuse(n),range(n))
+    orcle.measure(range(n), range(n))
+    buf = io.BytesIO()
+    qpy_serialization.dump(orcle, buf)
+    json_str = json.dumps({
+        'circuit': base64.b64encode(buf.getvalue()).decode('utf8'),
+    })
+    return json_str
+
+@app.route('/Grover/bitmap',methods=['GET'])
+
+def grover_bitmap():
+    if 'bitmap' in request.args:
+        bmp = request.args['bitmap']
+    else:
+        return jsonify({'ERROR':'bitmap not provided.'})
+    if 'API_key' in request.args:
+        key = request.args['API_key']
+    else:
+        return jsonify({'ERROR': 'API Key not provided.'})
+    if 'good states' in request.args:
+        num_good_states = int(request.args['good states'])
+    else:
+        return jsonify({'ERROR': 'Number of solutions not provided.'})
+
+    orcle = TruthTableOracle(bmp)
+    gr = Grover(orcle)
+    msr = gr.run(QuantumInstance(BasicAer.get_backend('qasm_simulator')))
+    print(msr['measurement'])
+    counts = sorted(msr['measurement'].items(),key=lambda x:x[1],reverse=True)
+    results = [int(item[0], 2) for item in counts[:num_good_states]]
+    return jsonify(results)
+
+@app.route('/Grover/boolean',methods=['GET'])
+
+def grover_boolexpr():
+    if 'expr' in request.args:
+        bool_expression = request.args['expr']
+    else:
+        return jsonify({'ERROR':'boolean expression not provided.'})
+    if 'API_key' in request.args:
+        key = request.args['API_key']
+    else:
+        return jsonify({'ERROR': 'API Key not provided.'})
+
+    orcle = LogicalExpressionOracle(bool_expression)
+    gr = Grover(orcle)
+    msr = gr.run(QuantumInstance(BasicAer.get_backend('qasm_simulator')))
+    print(msr['measurement'])
+    res = max(msr['measurement'].items(), key=lambda x: x[1])[0]
+    print(res)
+    return jsonify(res)
+
 
 
 if __name__=='__main__':
